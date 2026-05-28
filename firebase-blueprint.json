@@ -1,0 +1,69 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile with customized Pomodoro durations, XP, levels, and preferences.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Unique identifier for the user" },
+        "displayName": { "type": "string", "description": "Display name of the user" },
+        "email": { "type": "string", "description": "User's email address" },
+        "focusDuration": { "type": "number", "description": "Focus timer duration in minutes" },
+        "shortBreakDuration": { "type": "number", "description": "Short break timer duration in minutes" },
+        "longBreakDuration": { "type": "number", "description": "Long break timer duration in minutes" },
+        "dailyGoal": { "type": "number", "description": "Target count of daily focus segments" },
+        "theme": { "type": "string", "enum": ["light", "dark"], "description": "Active UI theme" },
+        "xp": { "type": "number", "description": "Acquired experience points" },
+        "level": { "type": "number", "description": "User experience level derived from XP" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last update timestamp" }
+      },
+      "required": ["userId", "email"]
+    },
+    "Activity": {
+      "title": "Activity",
+      "description": "A record of a completed focus or break session.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique ID of the activity record" },
+        "userId": { "type": "string", "description": "User who completed this activity" },
+        "taskName": { "type": "string", "description": "Optional name of the task focused on" },
+        "type": { "type": "string", "enum": ["focus", "short_break", "long_break"] },
+        "duration": { "type": "number", "description": "Completed duration in minutes" },
+        "completed": { "type": "boolean", "description": "Whether the session was fully completed" },
+        "syncedToCalendar": { "type": "boolean", "description": "Whether this was exported to Google Calendar" },
+        "calendarEventId": { "type": "string", "description": "ID of Google Calendar event if exported" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the activity was logged" }
+      },
+      "required": ["id", "userId", "type", "duration", "completed", "createdAt"]
+    },
+    "Badge": {
+      "title": "Badge",
+      "description": "Gamification milestone earned by the user.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique ID of the earned badge" },
+        "userId": { "type": "string", "description": "Owner of this badge" },
+        "badgeId": { "type": "string", "description": "Reference identifier of the predefined badge type" },
+        "title": { "type": "string", "description": "Aesthetic achievement name" },
+        "description": { "type": "string", "description": "Description of the milestone met to unlock the badge" },
+        "earnedAt": { "type": "string", "format": "date-time", "description": "Timestamp of achieving this badge" }
+      },
+      "required": ["id", "userId", "badgeId", "title", "earnedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User configuration, personalization variables, and profile stats."
+    },
+    "/users/{userId}/activities/{activityId}": {
+      "schema": "Activity",
+      "description": "Activity history tracking Pomodoro focus sessions and completed intervals."
+    },
+    "/users/{userId}/badges/{badgeId}": {
+      "schema": "Badge",
+      "description": "Unlocked gamified achievements or trophies."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Pomodoro Tracker",
+  "description": "Um aplicativo completo de Pomodoro com sincronização em tempo real, integração com Google Calendar, modo escuro, suporte offline e gamificação.",
+  "requestFramePermissions": ["notifications"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
