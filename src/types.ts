@@ -13,6 +13,7 @@ export interface UserSettings {
   userId: string;
   email: string;
   displayName?: string;
+  photoURL?: string;
   focusDuration: number; // in minutes
   shortBreakDuration: number; // in minutes
   longBreakDuration: number; // in minutes

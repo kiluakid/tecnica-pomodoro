@@ -173,21 +173,55 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             <h3 className="text-lg font-bold text-slate-900 dark:text-white uppercase tracking-tight">Perfil</h3>
           </div>
 
-          <div className="flex items-center space-x-3 mb-6">
-            {user?.photoURL ? (
-              <img
-                src={user.photoURL}
-                alt={user.displayName}
-                className="w-12 h-12 rounded-full border-2 border-slate-100 dark:border-white/5"
-                referrerPolicy="no-referrer"
-              />
-            ) : (
-              <div className="w-12 h-12 bg-orange-100 dark:bg-orange-950/30 text-orange-500 font-bold text-lg rounded-full flex items-center justify-center">
-                {user?.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
+          <div className="flex items-center space-x-3 mb-6 relative group">
+            <input
+              type="file"
+              accept="image/*"
+              id="profileImageInput"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (event) => {
+                    const result = event.target?.result as string;
+                    onSaveSettings({ photoURL: result });
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+            />
+            <div 
+              className="relative cursor-pointer" 
+              onClick={() => document.getElementById('profileImageInput')?.click()}
+              title="Mudar foto de perfil"
+            >
+              {settings.photoURL || user?.photoURL ? (
+                <img
+                  src={settings.photoURL || user?.photoURL}
+                  alt={settings.displayName || user?.displayName}
+                  className="w-12 h-12 rounded-full border-2 border-slate-100 dark:border-white/5 object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-950/30 text-orange-500 font-bold text-lg rounded-full flex items-center justify-center">
+                  {(settings.displayName || user?.displayName || 'U').charAt(0).toUpperCase()}
+                </div>
+              )}
+              <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className="text-white text-[10px] font-bold">Editar</span>
               </div>
-            )}
-            <div>
-              <h4 className="font-bold text-slate-900 dark:text-white line-clamp-1">{user?.displayName || 'Usuário'}</h4>
+            </div>
+            
+            <div className="flex-1">
+              <input 
+                type="text"
+                value={settings.displayName ?? user?.displayName ?? ''}
+                onChange={(e) => onSaveSettings({ displayName: e.target.value })}
+                className="w-full bg-transparent border-b border-transparent hover:border-slate-200 focus:border-orange-500 dark:hover:border-slate-800 dark:focus:border-orange-500 font-bold text-slate-900 dark:text-white line-clamp-1 py-1 focus:outline-none transition-colors"
+                placeholder="Seu nome"
+                title="Clique para editar seu nome"
+              />
               <p className="text-xs text-slate-400 dark:text-zinc-500 truncate">{user?.email}</p>
             </div>
           </div>

@@ -688,11 +688,18 @@ export default function App() {
           <header className="border-b border-slate-100 dark:border-white/5 bg-white/70 dark:bg-black/40 backdrop-blur-md sticky top-0 z-40 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
               <div className="flex items-center space-x-3 font-display">
-                <div className="p-2 bg-orange-500 text-white rounded-xl shadow-[0_0_15px_rgba(249,115,22,0.4)]">
-                  <Clock className="w-5 h-5" />
+                <div className="w-12 h-12 flex items-center justify-center overflow-hidden rounded-xl bg-[#1e2329] border border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+                  <img src="/logo.png" alt="KS Innovations Logo" className="w-full h-full object-cover" onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.style.display = 'none';
+                    if (target.nextElementSibling) {
+                      target.nextElementSibling.classList.remove('hidden');
+                    }
+                  }} />
+                  <span className="hidden text-white font-serif font-bold text-xl">KS</span>
                 </div>
                 <div>
-                  <h1 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight uppercase">Pomodoro Tracker</h1>
+                  <h1 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight uppercase">KS Innovations</h1>
                   <span className="text-[10px] text-emerald-500 font-bold flex items-center space-x-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     <span>Real-time Sync</span>
@@ -764,12 +771,12 @@ export default function App() {
                   <span className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold uppercase">{settings.xp} XP</span>
                 </div>
                 
-                {user?.photoURL ? (
+                {settings.photoURL || user?.photoURL ? (
                   <img
                     onClick={() => setActiveTab('settings')}
-                    src={user.photoURL}
-                    alt={user.displayName}
-                    className="w-9 h-9 rounded-full border border-slate-200 dark:border-slate-800 cursor-pointer active:scale-95"
+                    src={settings.photoURL || user?.photoURL}
+                    alt={settings.displayName || user?.displayName}
+                    className="w-9 h-9 rounded-full border border-slate-200 dark:border-slate-800 cursor-pointer active:scale-95 object-cover"
                     referrerPolicy="no-referrer"
                   />
                 ) : (
@@ -777,7 +784,7 @@ export default function App() {
                     onClick={() => setActiveTab('settings')}
                     className="w-9 h-9 bg-red-100 dark:bg-red-950/30 text-red-500 text-sm font-bold rounded-full flex items-center justify-center cursor-pointer active:scale-95 border border-slate-200 dark:border-slate-850"
                   >
-                    {user?.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
+                    {(settings.displayName || user?.displayName || 'U').charAt(0).toUpperCase()}
                   </div>
                 )}
               </div>
